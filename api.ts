@@ -1,5 +1,6 @@
-// @ts-ignore
+// @ts-expect-error
 import { API_KEY, API_URL } from "react-native-dotenv";
+
 import type { CatObject } from "./types";
 
 async function fetchCats() {
@@ -11,8 +12,8 @@ async function fetchCats() {
     });
 
     return result.json() as Promise<CatObject[]>;
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    console.error(e);
   }
 }
 

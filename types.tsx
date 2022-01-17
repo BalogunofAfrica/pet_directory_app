@@ -3,8 +3,8 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 export type CatObject = {
   name: string;
   image: {
-    url: string;
     height: number;
+    url: string;
     width: number;
   };
 };

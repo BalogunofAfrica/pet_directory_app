@@ -5,16 +5,23 @@ import Animated, {
   LightSpeedInLeft,
   SequencedTransition,
 } from "react-native-reanimated";
+
+import { Colors, Spacing } from "../constants";
+import { useColorScheme } from "../hooks";
 import { Text, View } from "./Themed";
 
 interface Props {
-  onPress(): void;
   index: number;
   name: string;
+  onPress(): void;
   uri: string;
 }
 
-export default function LikedCatBlock({ onPress, index, name, uri }: Props) {
+const IMAGE_SIZE = 150;
+
+export default function LikedCatBlock({ index, name, onPress, uri }: Props) {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme];
   return (
     <Animated.View
       layout={SequencedTransition.delay(1000)}
@@ -24,9 +31,9 @@ export default function LikedCatBlock({ onPress, index, name, uri }: Props) {
     >
       <Image style={styles.image} source={{ uri }} />
       <View style={styles.nameContainer}>
-        <Text>{name}</Text>
-        <Pressable onPress={onPress}>
-          <FontAwesome size={18} color={"red"} name="heart" />
+        <Text style={styles.text}>{name}</Text>
+        <Pressable style={styles.pressable} onPress={onPress}>
+          <FontAwesome size={18} color={colors.heart} name="heart" />
         </Pressable>
       </View>
     </Animated.View>
@@ -35,18 +42,28 @@ export default function LikedCatBlock({ onPress, index, name, uri }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 25,
-    width: 150,
+    marginBottom: Spacing.xl,
+    width: IMAGE_SIZE,
   },
   image: {
     borderRadius: 10,
-    height: 150,
-    marginRight: 15,
-    width: 150,
+    height: IMAGE_SIZE,
+    marginRight: Spacing.m,
+    width: IMAGE_SIZE,
   },
   nameContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 5,
+    marginTop: Spacing.xs,
+  },
+  pressable: {
+    alignItems: "flex-end",
+    flex: 0.3,
+    justifyContent: "center",
+  },
+  text: {
+    flex: 0.7,
+    fontFamily: "sf-pro-regular",
+    fontSize: 16,
   },
 });

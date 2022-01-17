@@ -10,22 +10,31 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import * as cache from "../cache";
+import { Cachekeys, Colors, Spacing } from "../constants";
+import { useColorScheme } from "../hooks";
+import { CatObject } from "../types";
 import { Text, View } from "./Themed";
 
 const AnimatedIcon = Animated.createAnimatedComponent(FontAwesome);
 
 interface Props {
+  item: CatObject;
   name: string;
   uri: string;
-  onPress(): void;
 }
 
-export default function CatListBlock({ name, uri, onPress }: Props) {
+const IMAGE_SIZE = 40;
+
+export default function CatListBlock({ item, name, uri }: Props) {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme];
+
   const liked = useSharedValue(false);
   const scale = useSharedValue(1);
   const animatedProps = useAnimatedProps<ComponentProps<typeof FontAwesome>>(
     () => ({
-      color: liked.value ? "red" : "black",
+      color: liked.value ? colors.heart : colors.liked,
     })
   );
   useAnimatedReaction(
@@ -43,18 +52,23 @@ export default function CatListBlock({ name, uri, onPress }: Props) {
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+
+  const handlePress = async (item: CatObject) => {
+    if (!liked.value) {
+      await cache.storeData(Cachekeys.likedCats, item);
+    } else {
+      await cache.removeData(Cachekeys.likedCats, item);
+    }
+    liked.value = !liked.value;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.breedContainer}>
         <Image style={styles.image} source={{ uri }} />
-        <Text>{name}</Text>
+        <Text style={styles.text}>{name}</Text>
       </View>
-      <Pressable
-        onPress={() => {
-          onPress();
-          liked.value = !liked.value;
-        }}
-      >
+      <Pressable onPress={() => handlePress(item)}>
         <AnimatedIcon
           style={animatedStyle}
           size={18}
@@ -73,16 +87,20 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 25,
-    paddingRight: 5,
-    flex: 1,
+    marginBottom: Spacing.xl,
+    paddingRight: Spacing.xs,
   },
   image: {
     borderRadius: 10,
-    height: 40,
-    marginRight: 15,
-    width: 40,
+    height: IMAGE_SIZE,
+    marginRight: Spacing.m,
+    width: IMAGE_SIZE,
+  },
+  text: {
+    fontFamily: "sf-pro-regular",
+    fontSize: 16,
   },
 });
