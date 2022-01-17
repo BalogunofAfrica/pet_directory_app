@@ -1,9 +1,11 @@
+// @ts-ignore
+import { API_KEY, API_URL } from "react-native-dotenv";
 import type { CatObject } from "./types";
 
 async function fetchCats() {
   try {
-    const headers = { "x-api-key": "723b860c-b1f4-4922-b9af-bdae9e3d8fde" };
-    const result = await fetch("https://api.thecatapi.com/v1/breeds", {
+    const headers = { "x-api-key": API_KEY };
+    const result = await fetch(`${API_URL}/breeds`, {
       headers,
       method: "GET",
     });

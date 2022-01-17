@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { fetchCats } from "../api";
 import { LikedCatBlock, View } from "../components";
@@ -8,12 +9,39 @@ import { pick } from "../util";
 
 export default function CatsIlike() {
   const [liked, setLiked] = useState<CatObject[]>([]);
+  const getCats = async () => {
+    try {
+      const res = await fetchCats();
+      const data = res?.map((cat) =>
+        pick(cat, ["image", "name"])
+      ) as CatObject[];
+      setLiked(data.splice(0, 10));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getData = async (key: string) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      console.log("got value", value);
+      setLiked(JSON.parse(value));
+      if (value !== null) {
+        // value previously storeds
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const keyValue = "liked";
 
   useEffect(() => {
-    fetchCats().then((res) => {
-      let data = res?.map((cat) => pick(cat, ["image", "name"])) as CatObject[];
-      setLiked(data.splice(0, 10));
-    });
+    // getCats();
+    getData(keyValue);
+    // (async () => {
+    //   await AsyncStorage.removeItem(keyValue);
+    // })();
   }, []);
 
   const handlePress = (name: string) => {

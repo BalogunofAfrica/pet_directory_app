@@ -9,28 +9,25 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { PathProps, SvgProps } from "react-native-svg";
 
 import { Text, View } from "./Themed";
-import { LikeIcon } from "./icon";
 
 const AnimatedIcon = Animated.createAnimatedComponent(FontAwesome);
 
 interface Props {
   name: string;
   uri: string;
+  onPress(): void;
 }
 
-export default function CatListBlock({ name, uri }: Props) {
+export default function CatListBlock({ name, uri, onPress }: Props) {
   const liked = useSharedValue(false);
   const scale = useSharedValue(1);
-  const animatedProps = useAnimatedProps<PathProps>(() => {
-    const name = liked.value ? "heart" : "heart-o";
-    return {
-      stroke: "#212227",
-      fill: "none",
-    };
-  });
+  const animatedProps = useAnimatedProps<ComponentProps<typeof FontAwesome>>(
+    () => ({
+      color: liked.value ? "red" : "black",
+    })
+  );
   useAnimatedReaction(
     () => liked.value,
     () => {
@@ -52,14 +49,18 @@ export default function CatListBlock({ name, uri }: Props) {
         <Image style={styles.image} source={{ uri }} />
         <Text>{name}</Text>
       </View>
-      <Pressable onPress={() => (liked.value = !liked.value)}>
-        {/* <AnimatedIcon
+      <Pressable
+        onPress={() => {
+          onPress();
+          liked.value = !liked.value;
+        }}
+      >
+        <AnimatedIcon
           style={animatedStyle}
           size={18}
-          name="heart"
+          name={"heart-o"}
           animatedProps={animatedProps}
-        /> */}
-        <LikeIcon animatedProps={animatedProps} />
+        />
       </Pressable>
     </View>
   );
