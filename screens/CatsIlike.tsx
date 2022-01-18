@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { FALLBACK_URL } from "react-native-dotenv";
 
 import * as cache from "../cache";
-import { LikedCatBlock, View } from "../components";
+import { LikedCatBlock, ListEmpty, View } from "../components";
 import { Cachekeys, Spacing } from "../constants";
 import type { CatObject } from "../types";
 
@@ -47,6 +47,7 @@ export default function CatsIlike() {
           })}
         </View>
       </ScrollView>
+      <ListEmpty length={liked.length} text="No liked cats yet!" />
     </View>
   );
 }

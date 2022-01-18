@@ -4,7 +4,7 @@ import { FlatList, StyleSheet } from "react-native";
 import { FALLBACK_URL } from "react-native-dotenv";
 
 import { fetchCats } from "../api";
-import { CatListBlock, View } from "../components";
+import { CatListBlock, ListEmpty, View } from "../components";
 import { Spacing } from "../constants";
 import type { CatObject } from "../types";
 import { pick } from "../util";
@@ -44,6 +44,7 @@ export default function AllCats() {
         }}
         showsVerticalScrollIndicator={false}
       />
+      <ListEmpty length={cats.length} text="No cats yet!" />
     </View>
   );
 }

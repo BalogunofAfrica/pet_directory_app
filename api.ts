@@ -13,7 +13,7 @@ async function fetchCats() {
 
     return result.json() as Promise<CatObject[]>;
   } catch (e) {
-    console.error(e);
+    throw e;
   }
 }
 

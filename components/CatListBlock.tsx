@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { ComponentProps } from "react";
-import { Image, Pressable, StyleSheet } from "react-native";
+import { Image, Pressable, StyleSheet, ToastAndroid } from "react-native";
 import Animated, {
   useAnimatedProps,
   useAnimatedReaction,
@@ -25,6 +25,7 @@ interface Props {
 }
 
 const IMAGE_SIZE = 40;
+const TOAST_MESSAGE = "You already have this cat in your favourites";
 
 export default function CatListBlock({ item, name, uri }: Props) {
   const colorScheme = useColorScheme();
@@ -55,7 +56,10 @@ export default function CatListBlock({ item, name, uri }: Props) {
 
   const handlePress = async (item: CatObject) => {
     if (!liked.value) {
-      await cache.storeData(Cachekeys.likedCats, item);
+      const res = await cache.storeData(Cachekeys.likedCats, item);
+      if (res === "duplicate data") {
+        ToastAndroid.show(TOAST_MESSAGE, 5000);
+      }
     } else {
       await cache.removeData(Cachekeys.likedCats, item);
     }

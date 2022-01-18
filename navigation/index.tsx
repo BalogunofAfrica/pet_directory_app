@@ -38,11 +38,11 @@ function BottomTabNavigator() {
       initialRouteName="AllCats"
       screenOptions={{
         headerTitleStyle: {
+          color: Colors[colorScheme].text,
           fontFamily: "sf-pro-semibold",
           fontSize: 16,
           lineHeight: 24,
           marginLeft: 9,
-          color: Colors[colorScheme].text,
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarLabelStyle: {

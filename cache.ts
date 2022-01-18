@@ -1,14 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ToastAndroid } from "react-native";
 
-const TOAST_MESSAGE = "You already have this cat in your favourites";
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
     return value ? JSON.parse(value) : null;
   } catch (e) {
     // error reading value
-    console.error(e);
+    return (e as Error).message;
   }
 };
 
@@ -25,12 +23,13 @@ const removeData = async (key: string, value: object) => {
     }
   } catch (e) {
     // error saving value
-    console.error(e);
+    return (e as Error).message;
   }
 };
 
 const storeData = async (key: string, value: object) => {
   let jsonValue: string;
+  let warn = "duplicate data";
   try {
     const stored = await AsyncStorage.getItem(key);
     if (stored) {
@@ -44,7 +43,7 @@ const storeData = async (key: string, value: object) => {
         await AsyncStorage.setItem(key, jsonValue);
         return;
       } else {
-        ToastAndroid.show(TOAST_MESSAGE, 3000);
+        return warn;
       }
     } else {
       jsonValue = JSON.stringify([value]);
@@ -52,7 +51,7 @@ const storeData = async (key: string, value: object) => {
     }
   } catch (e) {
     // error saving value
-    console.error(e);
+    return (e as Error).message;
   }
 };
 
