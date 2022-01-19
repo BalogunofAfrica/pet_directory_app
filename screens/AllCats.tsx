@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 // @ts-expect-error
 import { FALLBACK_URL } from "react-native-dotenv";
 
 import { fetchCats } from "../api";
-import { CatListBlock, ListEmpty, View } from "../components";
-import { Spacing } from "../constants";
+import { CatListBlock, View } from "../components";
+import { Colors, Spacing } from "../constants";
+import { useColorScheme } from "../hooks";
 import type { CatObject } from "../types";
 import { pick } from "../util";
 
 export default function AllCats() {
   const [cats, setCats] = useState<CatObject[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme];
+
   const getCats = async () => {
     try {
+      setLoading(true);
       const res = await fetchCats();
       const data = res?.map((cat) =>
         pick(cat, ["image", "name"])
       ) as CatObject[];
       setCats(data);
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -29,6 +38,7 @@ export default function AllCats() {
 
   return (
     <View style={styles.container}>
+      {loading && <ActivityIndicator color={colors.tint} size="small" />}
       <FlatList
         data={cats}
         keyExtractor={(i) => `${i.name}`}
@@ -44,7 +54,6 @@ export default function AllCats() {
         }}
         showsVerticalScrollIndicator={false}
       />
-      <ListEmpty length={cats.length} text="No cats yet!" />
     </View>
   );
 }

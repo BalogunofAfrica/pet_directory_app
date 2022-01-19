@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pet_directory_app",
-    "slug": "pet_directory_app",
+    "name": "Pet Directory",
+    "slug": "PetDirectory",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,7 +24,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "jsEngine": "hermes",
+      "package": "com.balogunofafrica.pet_directory_app"
     },
     "web": {
       "favicon": "./assets/images/icon.png"
