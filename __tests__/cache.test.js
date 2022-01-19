@@ -56,7 +56,7 @@ describe("CRUD operations on the local storage", () => {
     });
 
     it("should write data to storage", async () => {
-      const data = Math.floor(Math.random() * 1000);
+      const data = { name: "Cat1" };
       await cache.storeData(Cachekeys.likedCats, data);
 
       const res = await cache.getData(Cachekeys.likedCats);
