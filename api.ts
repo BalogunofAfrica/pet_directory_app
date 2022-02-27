@@ -1,5 +1,4 @@
-// @ts-expect-error
-import { API_KEY, API_URL } from "react-native-dotenv";
+import { API_KEY, API_URL } from "@env";
 
 import type { CatObject } from "./types";
 

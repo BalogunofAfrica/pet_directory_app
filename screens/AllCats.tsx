@@ -1,7 +1,6 @@
+import { FALLBACK_URL } from "@env";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
-// @ts-expect-error
-import { FALLBACK_URL } from "react-native-dotenv";
 
 import { fetchCats } from "../api";
 import { CatListBlock, View } from "../components";

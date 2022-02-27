@@ -1,8 +1,7 @@
+import { FALLBACK_URL } from "@env";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-// @ts-expect-error
-import { FALLBACK_URL } from "react-native-dotenv";
 
 import * as cache from "../cache";
 import { LikedCatBlock, View } from "../components";

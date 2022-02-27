@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { CatObject } from "./types";
+
 const getData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
@@ -10,14 +12,13 @@ const getData = async (key: string) => {
   }
 };
 
-const removeData = async (key: string, value: object) => {
+const removeData = async (key: string, value: CatObject) => {
   let jsonValue: string;
   try {
     const stored = await AsyncStorage.getItem(key);
     if (stored) {
       let data = JSON.parse(stored);
-      // @ts-expect-error
-      data = data.filter((item: { name: string }) => item.name !== value.name);
+      data = data.filter((item: CatObject) => item.name !== value.name);
       jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem(key, jsonValue);
     }
@@ -27,7 +28,7 @@ const removeData = async (key: string, value: object) => {
   }
 };
 
-const storeData = async (key: string, value: object) => {
+const storeData = async (key: string, value: CatObject) => {
   let jsonValue: string;
   let warn = "duplicate data";
   try {
@@ -35,8 +36,7 @@ const storeData = async (key: string, value: object) => {
     if (stored) {
       const parsed = JSON.parse(stored);
       const isExisting = parsed.some(
-        // @ts-expect-error
-        (item: { name: string }) => item.name === value.name
+        (item: CatObject) => item.name === value.name
       );
       if (!isExisting) {
         jsonValue = JSON.stringify([value, ...parsed]);
